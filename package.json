@@ -1,0 +1,25 @@
+{
+  "name": "abonapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "crypto": "^1.0.1",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "mongodb-autoincrement": "^1.0.1",
+    "mongoose": "^5.0.14",
+    "mongoose-sequence": "^4.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
