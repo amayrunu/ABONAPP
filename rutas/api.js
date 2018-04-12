@@ -2,7 +2,8 @@
 
 const config = require('../config/database');
 const jwt = require('jsonwebtoken');
-const User= require('../modelos/usuario');
+const Usuario= require('../modelos/usuario');
+const Cliente = require('../modelos/clientes');
 
 module.exports = (router) =>{
     router.post('/registro', (req, res)=>{
@@ -73,6 +74,67 @@ module.exports = (router) =>{
             })
         }
     })
+
+    router.post('/registrarcliente',(req,res)=>{
+        let cliente= new Cliente();
+        cliente.nombre =req.body.nombre;
+        cliente.numero = req.body.numero;
+        cliente.direccion = req.body.direccion;
+        cliente.foto= req.body.foto;
+        cliente.sexo = req.body.sexo;
+        
+        cliente.save((err)=>{
+            if(err){
+                if(err.code == 11000){
+                    res.json({success: false, message: 'El cliente ya esta registrado'})
+                }else{
+                    res.json({success:false, message: err})
+                }
+            }else{
+                res.json({success: true, message: 'Cliente registrado'})
+            }
+        })
+    })
+
+    router.get('/obtenerperfil', (req,res)=>{
+        cliente.findOne({_id: req.decoded.clienteId},(err,cliente) => {
+            if(err){
+                res.json({success: false, message: err})
+            }else{
+                res.json({success: true, message: Cliente})
+            }
+        })
+    })
+
+    router.put('/actualizarcliente', (req,res) => {
+        Cliente.findOneAndUpdate({_id: req.decoded.clienteId},{$push: { 'cliente':{
+             'nombre': req.body.nombre,
+             'numero': req.body.numero,
+             'direccion': req.body.direccion,
+             'foto': req.body.foto,
+             'sexo': req.body.sexo,
+
+        }}},(err,cliente)=>{
+            if(err){
+                res.json({success: false, message: err})
+            }else{
+                res.json({success:false, message: 'Campos Actualizados..'})
+            }
+                      
+        })
+    })
+
+    router.delete('/eliminarcliente', (req,res) =>{
+        cliente.remove({_id: req.decoded.clienteId},(err,cliente) =>{
+            if(err) {
+                res.json({success: false, message: err})
+            }else{
+                res.json({success: false, message: 'Cliente eliminado con exito..'})
+            }
+        })
+    })
+
     return router
+
 
 }

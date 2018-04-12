@@ -4,7 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 const config = require('./config/database');
 const router = express.Router();
-const usuarios= require('./rutas/usuario')(router);
+const api= require('./rutas/api')(router);
 const bodyParser = require('body-parser');
 const port = process.env.port || 3000
 
@@ -16,7 +16,7 @@ mongoose.connect(config.uri, (err)=>{
 });
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
-app.use('/usuario',usuarios)
+app.use('/api',api)
 
 
 app.listen(port, ()=>{
