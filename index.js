@@ -4,7 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 const config = require('./config/database');
 const router = express.Router();
-const api= require('./rutas/api')(router);
+const api = require('./rutas/api')(router);
 const bodyParser = require('body-parser');
 const port = process.env.port || 3000
 

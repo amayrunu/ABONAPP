@@ -76,7 +76,7 @@ module.exports = (router) =>{
     })
 
     router.post('/registrarcliente',(req,res)=>{
-        let cliente= new Cliente();
+        let cliente = new Cliente();
         cliente.nombre =req.body.nombre;
         cliente.numero = req.body.numero;
         cliente.direccion = req.body.direccion;
@@ -95,44 +95,51 @@ module.exports = (router) =>{
             }
         })
     })
-
-    router.get('/obtenerperfil', (req,res)=>{
-        cliente.findOne({_id: req.decoded.clienteId},(err,cliente) => {
-            if(err){
-                res.json({success: false, message: err})
-            }else{
-                res.json({success: true, message: Cliente})
+    router.get('/clientes', (req,res)=>{
+        Cliente.find({}, (err, cliente )=>{
+            if (err) {
+                res.json({succes: false, message: err})
+            } else {
+                res.json({succes: true, message: cliente})
             }
         })
     })
 
-    router.put('/actualizarcliente', (req,res) => {
-        Cliente.findOneAndUpdate({_id: req.decoded.clienteId},{$push: { 'cliente':{
-             'nombre': req.body.nombre,
-             'numero': req.body.numero,
-             'direccion': req.body.direccion,
-             'foto': req.body.foto,
-             'sexo': req.body.sexo,
-
-        }}},(err,cliente)=>{
-            if(err){
-                res.json({success: false, message: err})
-            }else{
-                res.json({success:false, message: 'Campos Actualizados..'})
-            }
-                      
+    router.get('/obtenerperfil/:clienteId', (req,res)=>{
+        let clienteId = req.params.clienteId
+        Cliente.findById(clienteId, (err, cliente)=>{
+            if(err) return res.status(500).send ({message: `error al encontrar al cliente: ${err}`})
+            if(!cliente) return res.status(404).send({message: `el cliente no existe`})
+            res.status(200).send({cliente})
         })
     })
 
-    router.delete('/eliminarcliente', (req,res) =>{
-        cliente.remove({_id: req.decoded.clienteId},(err,cliente) =>{
-            if(err) {
-                res.json({success: false, message: err})
-            }else{
-                res.json({success: false, message: 'Cliente eliminado con exito..'})
-            }
+    router.put('/actualizarcliente/:clienteId', (req,res) => {
+        let clienteId =req.params.clienteId
+        let update = req.body
+        
+        Cliente.findByIdAndUpdate(clienteId, update, (err, clienteUpdate)=>{
+
+            if(err)res.status(500).send({message: `error al actualizar al cliente: ${err}`})
+            res.status(200).send({cliente: clienteUpdate + 'cliente actualizado..'})
         })
     })
+
+      
+
+    router.delete('/clientes/:clienteId', (req,res) =>{
+        let clienteId = req.params.clienteId
+        Cliente.findById(clienteId, (err, cliente)=>{
+            if(err) return res.status(500).send ({message: `error al borrar al cliente: ${err}`})
+        cliente.remove(err =>{
+            if(err) return res.status(500).send ({message: `error al borrar al cliente: ${err}`})
+            res.status(200).send({message: ' el cliente ha sido eliminado'})
+        })
+            
+        })
+    })
+
+    
 
     return router
 
