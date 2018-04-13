@@ -4,6 +4,8 @@ const config = require('../config/database');
 const jwt = require('jsonwebtoken');
 const Usuario= require('../modelos/usuario');
 const Cliente = require('../modelos/clientes');
+const Pedido = require('../modelos/pedido');
+
 
 module.exports = (router) =>{
     router.post('/registro', (req, res)=>{
@@ -139,7 +141,74 @@ module.exports = (router) =>{
         })
     })
 
-    
+
+
+router.post('/registrarpedido',(req,res)=>{
+    let pedido = new Pedido();
+    pedido.modelo =req.body.modelo;
+    pedido.cantidad = req.body.cantidad;
+    pedido.producto = req.body.producto;
+    pedido.talla= req.body.talla;
+    pedido.color = req.body.sexo;
+    pedido.costo = req.body.costo;
+    pedido.venta = req.body.venta;
+    pedido.pedido = req.body.pedido;
+
+    pedido.save((err)=>{
+        if(err){
+            if(err.code == 11000){
+                res.json({success: false, message: 'El pedido ya esta registrado'})
+            }else{
+                res.json({success:false, message: err})
+            }
+        }else{
+            res.json({success: true, message: 'Pedido registrado'})
+        }
+    })
+})
+
+ router.get('/pedidos', (req,res)=>{
+        Pedido.find({}, (err, pedido )=>{
+            if (err) {
+                res.json({succes: false, message: err})
+            } else {
+                res.json({succes: true, message: pedido})
+            }
+        })
+    })
+
+    router.get('/obtenerpedido/:pedidoId', (req,res)=>{
+        let pedidoId = req.params.pedidoId
+        Pedido.findById(pedidoId, (err, pedido)=>{
+            if(err) return res.status(500).send ({message: `error al encontrar el pedido: ${err}`})
+            if(!pedido) return res.status(404).send({message: `el pedido no existe`})
+            res.status(200).send({pedido})
+        })
+    })
+
+    router.put('/actualizarpedido/:pedidoId', (req,res) => {
+        let pedidoId =req.params.pedidoId
+        let update = req.body
+        
+        Pedido.findByIdAndUpdate(pedidoId, update, (err, pedidoUpdate)=>{
+
+            if(err)res.status(500).send({message: `error al actualizar el pedido: ${err}`})
+            res.status(200).send({pedido: pedidoUpdate + 'pedido actualizado..'})
+        })
+    })
+
+    router.delete('/eliminarpedido/:pedidoId', (req,res) =>{
+        let pedidoId = req.params.clienteId
+        Pedido.findById(pedidoId, (err, pedido)=>{
+            if(err) return res.status(500).send ({message: `error al borrar el pedido: ${err}`})
+
+        Pedido.remove(err =>{
+            if(err) return res.status(500).send ({message: `error al borrar el pedido: ${err}`})
+            res.status(200).send({message: ' el pedido ha sido eliminado'})
+        })
+            
+        })
+    })
 
     return router
 
