@@ -79,6 +79,7 @@ module.exports = (router) =>{
 
     router.post('/registrarcliente',(req,res)=>{
         let cliente = new Cliente();
+        cliente.usuario=req.body.usuario;
         cliente.nombre =req.body.nombre;
         cliente.numero = req.body.numero;
         cliente.direccion = req.body.direccion;
@@ -129,7 +130,7 @@ module.exports = (router) =>{
 
       
 
-    router.delete('/clientes/:clienteId', (req,res) =>{
+    router.delete('/eliminarclientes/:clienteId', (req,res) =>{
         let clienteId = req.params.clienteId
         Cliente.findById(clienteId, (err, cliente)=>{
             if(err) return res.status(500).send ({message: `error al borrar al cliente: ${err}`})

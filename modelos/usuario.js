@@ -9,7 +9,7 @@ const userSchema = new Schema({
     correo: {type: String, unique: true, required: true},
     telefono: {type: Number},
     contrasena: {type: String},
-    confirmar: {tpe: String}
+    
 
 
 });
