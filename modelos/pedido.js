@@ -7,11 +7,11 @@ const pedidoSchema = new Schema({
     modelo: {type: String},
     cantidad: {type: Number},
     producto: {type: String},
-    talla: {type: Number},
+    talla: {type: String},
     color: {type: String},
     costo: {type: Number},
-    venta: {type: Number},
-    pedido: {type: Number},
+    venta: {type: String},
+    pedido: {type: String},
 
 
 })

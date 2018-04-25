@@ -9,7 +9,7 @@ const usuario=mongoose.model('usuario');
 const ClienteSchema = new Schema({
     usuario: {type: Schema.ObjectId,ref: 'usuario'},
     nombre: {type: String},
-    numero: {type: Number},
+    numero: {type: String},
     direccion: {type: String},
     foto: {type: String},
     sexo: {type: String}
