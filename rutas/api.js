@@ -27,7 +27,9 @@ module.exports = (router) =>{
                         res.json({success: false, message: err})
                     }
                 }else{
-                    res.json({success: true, message: 'Usuario Guardado'})
+                   
+                    const token = jwt.sign({usuarioId: usuario._id}, config.secret,{expiresIn: '24h'});
+                            res.json({success: true, message: 'Usuario autenticado', token:token})
                 }
             })
         }
