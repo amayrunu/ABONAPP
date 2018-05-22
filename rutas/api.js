@@ -10,8 +10,10 @@ const Pedido = require('../modelos/pedido');
 module.exports = (router) =>{
     router.post('/registro', (req, res)=>{
         let usuario= new Usuario();
+        console.log(req.body.correo)
         if(!req.body.correo){
             res.json({success: false, message: ' Favor de ingresar el correo electronico'})
+        
         }else{
             usuario.nombre     =  req.body.nombre;
             usuario.correo     =  req.body.correo;
@@ -37,6 +39,7 @@ module.exports = (router) =>{
     })
 
     router.post('/iniciosesion',(req,res)=>{
+        console.log(req.body.correo)
         if(!req.body.correo){
             res.json({success: false, message: 'Ingresar el correo '})
         }else if(!req.body.contrasena){
